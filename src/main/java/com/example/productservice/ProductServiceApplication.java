@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,8 @@ public class ProductServiceApplication {
         SpringApplication.run(ProductServiceApplication.class, args);
     }
     @Bean
-    CommandLineRunner start(ProductRepository productRepository){
+    CommandLineRunner start(ProductRepository productRepository, RepositoryRestConfiguration repositoryRestConfiguration){
+        repositoryRestConfiguration.exposeIdsFor(Product.class);
         return args -> {
             productRepository.save(new Product(null, "Ordinateur",15000,12));
             productRepository.save(new Product(null, "Imprimante",1200,15));
@@ -43,6 +45,7 @@ class Product{
     private String name;
     private double price;
     private double quantity;
+    //private String designation;
 }
 @RepositoryRestResource
 interface ProductRepository extends JpaRepository<Product, Long>{
